@@ -38,7 +38,8 @@ export default function App() {
       });
   }, [])
 
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([]);
+  const [review, setReviews] = useState([])
 
   useEffect(() => {
     const services = [
@@ -75,6 +76,17 @@ export default function App() {
     setPosts(services)
   }, [])
 
+  const reviews = []
+  const handleSubmitForm = (name, description, phone) => {
+    const newForm = {
+      id: uuid(),
+      name,
+      description,
+
+    }
+    const updatedForm = [...reviews, newForm]
+    setReviews(updatedForm)
+  }
   return (
     <NavigationContainer>
       <View style={styles.container}>
@@ -96,6 +108,7 @@ export default function App() {
               <Services
                 {...props}
                 posts={posts}
+                onAddForm={handleSubmitForm}
               />
             )}
           </Tab.Screen>

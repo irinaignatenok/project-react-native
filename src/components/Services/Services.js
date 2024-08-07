@@ -17,15 +17,19 @@ export default function Services({ navigation, route, posts, onAddForm }) {
                 )}
             </Stack.Screen>
             <Stack.Screen name='Details' component={Details} />
-            <Stack.Screen name='Submit'
-                options={{ title: 'Add a new Post' }}>
-                {(props) => {
+            {/* <Stack.Screen name="Submit" component={Form} /> */}
+            <Stack.Screen
+                name="Submit"
+                options={{ title: "Add a new Post" }}
+            >
+                {(props) => (
                     <Form
                         {...props}
                         onAddForm={onAddForm}
                     />
-                }}
+                )}
             </Stack.Screen>
+
 
         </Stack.Navigator>
 

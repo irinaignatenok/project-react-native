@@ -48,28 +48,36 @@ export default function App() {
         title: "Hair highlighting",
         description: "The purpose of highlighting is to add depth, dimension, and a sun-kissed look to the hair.",
         image: "image1.png",
-        price: "$250"
+        price: "$250",
+        review: "",
+        liked: ""
       },
       {
         id: uuid(),
         title: "Keratin straightening,",
         description: "The purpose of highlighting is to add depth, dimension, and a sun-kissed look to the hair.",
         image: "image2.png",
-        price: "$230"
+        price: "$230",
+        review: "",
+        liked: ""
       },
       {
         id: uuid(),
         title: "Hair highlighting",
         description: "The purpose of highlighting is to add depth, dimension, and a sun-kissed look to the hair.",
         image: "image3.png",
-        price: "$250"
+        price: "$250",
+        review: "",
+        liked: ""
       },
       {
         id: uuid(),
         title: "Hair highlighting",
         description: "The purpose of highlighting is to add depth, dimension, and a sun-kissed look to the hair.",
         image: "image4.png",
-        price: "$250"
+        price: "$250",
+        review: "",
+        liked: ""
       }
     ]
 

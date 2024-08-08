@@ -4,7 +4,7 @@ import styles from './styles'; // Ensure this path is correct
 import imageMappings from '../../../../assets/imageMapping';// Ensure this path is correct
 // import defaultImage from '../../../../assets/default.png'; // Ensure this path is correct
 
-export default function PostItem({ post }) {
+export default function PostItem({ post, rev }) {
     const { title, image, description, price } = post;
 
     // Function to get the image source
@@ -26,6 +26,7 @@ export default function PostItem({ post }) {
             />
             <Text style={styles.description}>{description}</Text>
             <Text style={styles.price}>{price}</Text>
+
         </View>
     );
 }

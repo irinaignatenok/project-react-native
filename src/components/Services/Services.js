@@ -6,17 +6,27 @@ import Form from '../Form/Form';
 
 
 const Stack = createNativeStackNavigator();
-export default function Services({ navigation, route, posts, onAddForm }) {
+export default function Services({ navigation, route, posts, onAddForm, reviews }) {
     return (
         <Stack.Navigator>
             <Stack.Screen name="List" options={{ headerShown: false }}>
                 {(props) => (
                     <PostList
                         {...props}
-                        posts={posts} />
+                        posts={posts}
+                        reviews={reviews} />
                 )}
             </Stack.Screen>
-            <Stack.Screen name='Details' component={Details} />
+            <Stack.Screen name='Details'
+                options={{ title: "Add a new Post" }}>
+                {(props) => (
+                    <Details
+                        {...props}
+                        reviews={reviews} />
+                )}
+
+
+            </Stack.Screen>
             {/* <Stack.Screen name="Submit" component={Form} /> */}
             <Stack.Screen
                 name="Submit"

@@ -11,6 +11,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import SavedInfo from './src/components/SavedInfo/SavedInfo';
 import uuid from 'react-uuid';
+import AppLoader from './src/components/AppLoader';
+import { save } from './src/database/write';
 
 // Keep the splash screen visible while we fetch resources (there is a promise we can use then and catch)
 SplashScreen.preventAutoHideAsync()
@@ -25,6 +27,11 @@ SplashScreen.preventAutoHideAsync()
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [review, setReviews] = useState([])
   useEffect(() => {
     // TODO add database
 
@@ -38,10 +45,10 @@ export default function App() {
       });
   }, [])
 
-  const [posts, setPosts] = useState([]);
-  const [review, setReviews] = useState([])
+
 
   useEffect(() => {
+
     const services = [
       {
         id: uuid(),
@@ -85,52 +92,90 @@ export default function App() {
   }, [])
 
   const reviews = []
-  const handleSubmitForm = (name, description, phone) => {
-    const newForm = {
-      id: uuid(),
-      name,
-      description,
 
+  const handleSubmitForm = async (description, liked, postId) => {
+    console.log("Does it work")
+    try {
+      const newForm = {
+        description: description,
+        liked: liked,
+
+      }
+      console.log("Saving new task:", newForm)
+      const docId = await save(newForm)
+      console.log("Doc Id", docId)
+
+      if (docId) {
+        newForm.id = docId
+
+        setReviews(prevReviews => [...prevReviews, newForm])
+        console.log("rev", review)
+      }
+
+
+    } catch (error) {
+      console.log('Error adding task:', error);
     }
-    const updatedForm = [...reviews, newForm]
-    setReviews(updatedForm)
+  }
+
+  const handleReviewLoaded = (loadedReview) => {
+    setReviews(loadedReview);
+    setIsLoading(false)
+  }
+
+
+  const handleNotFound = () => {
+    setNotFound(true)
+    setIsLoading(false)
+
   }
   return (
-    <NavigationContainer>
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-        <Header />
+    <>
+      <AppLoader onReviewLoaded={handleReviewLoaded} onNotFound={handleNotFound} />
+      <NavigationContainer>
+        <View style={styles.container}>
+          <StatusBar style="auto" />
+          <Header />
 
 
-        <Tab.Navigator>
-          <Tab.Screen
-            name="Home"
-            options={{
-              headerShown: false,
-              tabBarIcon: ({ color, size }) => (
-                <AntDesign name="home" size={size} color={color} />
-              )
-            }}
-          >
-            {(props) => (
-              <Services
-                {...props}
-                posts={posts}
-                onAddForm={handleSubmitForm}
-              />
-            )}
-          </Tab.Screen>
-          <Tab.Screen name="My Info"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Fontisto name="favorite" size={size} color={color} />
-              )
-            }}
-            component={SavedInfo}
-          />
-        </Tab.Navigator>
-      </View>
-    </NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen
+              name="Home"
+              options={{
+                headerShown: false,
+                tabBarIcon: ({ color, size }) => (
+                  <AntDesign name="home" size={size} color={color} />
+                )
+              }}
+            >
+              {(props) => (
+                <Services
+                  {...props}
+                  reviews={review}
+                  posts={posts}
+                  onAddForm={handleSubmitForm}
+                />
+              )}
+            </Tab.Screen>
+            <Tab.Screen name="My Info"
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Fontisto name="favorite" size={size} color={color} />
+                )
+              }}>
+              {(props) => (
+                <SavedInfo
+                  {...props}
+                  reviews={review}
+                  onAddForm={handleSubmitForm}
+                />
+              )}
+            </Tab.Screen>
+          </Tab.Navigator>
+        </View>
+      </NavigationContainer>
+
+    </>
 
   );
 }

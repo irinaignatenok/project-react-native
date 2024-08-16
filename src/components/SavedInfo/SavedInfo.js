@@ -1,16 +1,14 @@
 import { Text, Pressable, View, TextInput, Button, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import styles from './styles';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import * as database from '../../database/index'
+
+import styles from './styles';
+import * as database from '../../database/index';
 
 export default function SavedInfo({ onAddForm, reviews }) {
-    const [liked, setLiked] = useState(false);
     const [savingData, setSavingData] = useState(false);
     const [errorMessage, setErrorMessage] = useState([]);
     const [reviewDescription, setReviewDescription] = useState('');
-    const [review, setReview] = useState([])
     const [reviewList, setReviewList] = useState([]);
 
     useEffect(() => {
@@ -20,6 +18,7 @@ export default function SavedInfo({ onAddForm, reviews }) {
                 const reviewsWithLikes = reviewsFromFirebase.map(review => ({
                     ...review,
                     likes: review.likes || 0,
+                    liked: false, // Initialize liked state for each review
                 }));
                 setReviewList(reviewsWithLikes);
             } catch (error) {
@@ -27,10 +26,7 @@ export default function SavedInfo({ onAddForm, reviews }) {
             }
         };
         getReviews();
-    }, []);
-    const handleLabelPressed = () => {
-        setLiked(!liked);
-    };
+    }, [reviews]);
 
     const handleDescriptionChange = (value) => {
         setReviewDescription(value);
@@ -46,22 +42,29 @@ export default function SavedInfo({ onAddForm, reviews }) {
             setErrorMessage(validate);
         } else {
             setSavingData(true);
-            await onAddForm(reviewDescription, liked);
+            await onAddForm(reviewDescription, false); // Passing `false` for `liked` when adding a new review
             setSavingData(false);
-            setReviewDescription("")
-            setErrorMessage("")
-            setLiked(false)
-
+            setReviewDescription("");
+            setErrorMessage([]);
         }
     };
 
     const handleLikePress = async (index) => {
-        const updatedReviews = [...review];
-        updatedReviews[index].likes = (updatedReviews[index].likes || 0) + 1;
 
+        const updatedReviews = [...reviewList];
+        updatedReviews[index].likes = (updatedReviews[index].likes || 0) + 1;
+        updatedReviews[index].liked = true;
         setReviewList(updatedReviews);
+
         // Update the review in the database
-        await database.update(updatedReviews[index].id, updatedReviews[index]);
+        try {
+            await database.update(updatedReviews[index].id, updatedReviews[index]);
+        } catch (error) {
+            console.error('Error updating like count:', error);
+            updatedReviews[index].likes -= 1;
+            updatedReviews[index].liked = false;
+            setReviewList(updatedReviews);
+        }
     };
 
     return (
@@ -69,9 +72,6 @@ export default function SavedInfo({ onAddForm, reviews }) {
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.label}>Title:</Text>
-                    <Pressable style={styles.icons} onPress={handleLabelPressed}>
-                        <AntDesign name={liked ? "heart" : "hearto"} size={24} color={liked ? "red" : "black"} />
-                    </Pressable>
                 </View>
 
                 <TextInput
@@ -88,14 +88,18 @@ export default function SavedInfo({ onAddForm, reviews }) {
             </View>
             <View style={styles.containerReviews}>
                 <ScrollView>
-                    {review.length > 0 ? (
+                    {reviewList.length > 0 ? (
                         reviewList.map((review, index) => (
-                            <View key={index} style={styles.reviewContainer}>
+                            <View key={review.id} style={styles.reviewContainer}>
                                 <Text style={styles.reviewText}>{review.description}</Text>
                                 <View style={styles.likesContainer}>
                                     <Text style={styles.likedText}>{review.likes}</Text>
                                     <Pressable onPress={() => handleLikePress(index)}>
-                                        <AntDesign name="like2" size={24} color="black" />
+                                        <AntDesign
+                                            name={review.liked ? "like1" : "like2"}
+                                            size={24}
+                                            color={review.liked ? "red" : "black"}
+                                        />
                                     </Pressable>
                                 </View>
                             </View>
@@ -106,6 +110,5 @@ export default function SavedInfo({ onAddForm, reviews }) {
                 </ScrollView>
             </View>
         </>
-
     );
 }

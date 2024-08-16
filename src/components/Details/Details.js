@@ -52,17 +52,6 @@ export default function Details({ navigation, route }) {
                 />
                 <Text style={styles.description}>{description}</Text>
                 <Text style={styles.price}>{price}</Text>
-                {reviews.length > 0 ? (
-                    reviews.map((review, index) => (
-                        <View key={index} style={styles.reviewContainer}>
-                            <Text style={styles.reviewText}>{review.description}</Text>
-                            <Text style={styles.likedText}>Liked: {review.liked ? 'Yes' : 'No'}</Text>
-                        </View>
-                    ))
-                ) : (
-                    <Text>No reviews available for this post.</Text>
-                )}
-                <Button title="Add review" onPress={() => { handleSubmitButton(id) }} />
 
 
             </ScrollView>

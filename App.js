@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import Header from './src/components/Header/Header';
 import styles from './src/styles/main';
 import * as SplashScreen from 'expo-splash-screen';
@@ -91,7 +91,7 @@ export default function App() {
     setPosts(services)
   }, [])
 
-  const reviews = []
+
 
   const handleSubmitForm = async (description, liked, postId) => {
     console.log("Does it work")
@@ -157,7 +157,7 @@ export default function App() {
                 />
               )}
             </Tab.Screen>
-            <Tab.Screen name="My Info"
+            <Tab.Screen name="Reviews"
               options={{
                 tabBarIcon: ({ color, size }) => (
                   <Fontisto name="favorite" size={size} color={color} />

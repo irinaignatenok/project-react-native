@@ -1,29 +1,18 @@
-import { Text, View, Image, Button, Pressable, ScrollView } from 'react-native';
-import { useEffect, useState } from 'react';
+import { Text, View, Image, ScrollView } from 'react-native';
+import { useEffect } from 'react';
 import imageMapping from '../../../assets/imageMapping';
 import styles from "./styles";
 import * as database from '../../database/index';
-import { loadById } from '../../database/read'
+
 
 export default function Details({ navigation, route }) {
     const { post, reviews } = route.params;
     console.log("Rev", reviews)
     const { id, title, description, image, price } = post;
-    const [review, setReview] = useState(null)
-    const [liked, setLiked] = useState(null)
-    const [notFound, setNotFound] = useState(false);
+
 
     useEffect(() => {
-        //     (async () => {
-        //         const data = await loadById(id)
-        //         if (data) {
-        //             setLiked(data.liked)
-        //             setReview(data.review)
-        //         } else {
-        //             setNotFound(true)
-        //         }
-        //     })()
-        // }, [])
+
 
         (async () => {
             console.log("My data")
@@ -35,12 +24,9 @@ export default function Details({ navigation, route }) {
     }, [navigation, title])
 
     const getImageSource = (imageName) => {
-        return imageMapping[imageName] || defaultImage; // Use default image if not found
+        return imageMapping[imageName] || defaultImage;
     };
 
-    const handleSubmitButton = (id) => {
-        navigation.navigate("Submit", id)
-    }
 
 
     return (

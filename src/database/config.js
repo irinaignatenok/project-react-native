@@ -1,13 +1,14 @@
 import { initializeApp } from "firebase/app";
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCpRDU_PewJ_cJcg9nBnI8pcO_e7GRZPI0",
-    authDomain: "crossplatformproject-1e285.firebaseapp.com",
-    projectId: "crossplatformproject-1e285",
-    storageBucket: "crossplatformproject-1e285.appspot.com",
-    messagingSenderId: "517137444818",
-    appId: "1:517137444818:web:50eccbab9a2f37653b620b"
+    apiKey: "AIzaSyCztV46GsT3Anr5q6Hpg2k0mIWBsEl3s-A",
+    authDomain: "hair-stylist-6de87.firebaseapp.com",
+    projectId: "hair-stylist-6de87",
+    storageBucket: "hair-stylist-6de87.appspot.com",
+    messagingSenderId: "126587130789",
+    appId: "1:126587130789:web:7b06fe862075b60262ce4c"
 };
 
 // Initialize Firebase

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { View, Text, Image, Touchable, TouchableOpacity, FlatList } from 'react-native';
 import styles from './styles'; // Ensure this path is correct
 import imageMappings from '../../../../assets/imageMapping';// Ensure this path is correct
 // import defaultImage from '../../../../assets/default.png'; // Ensure this path is correct
@@ -17,15 +18,25 @@ export default function PostItem({ post, rev }) {
         }
     };
 
+
+
+
     return (
+
         <View style={styles.container}>
-            <Text style={styles.title}>{title}</Text>
-            <Image
-                source={getImageSource(image)}
-                style={styles.image}
-            />
-            <Text style={styles.description}>{description}</Text>
-            <Text style={styles.price}>{price}</Text>
+            <View>
+                <Image
+                    source={getImageSource(image)}
+                    style={styles.image}
+                />
+            </View>
+            <View style={styles.textContainer}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.description}>Get more information...</Text>
+                <Text style={styles.price}>{price}</Text>
+            </View>
+
+
 
         </View>
     );

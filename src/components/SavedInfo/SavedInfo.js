@@ -105,7 +105,7 @@ export default function SavedInfo({ onAddForm, reviews }) {
                             </View>
                         ))
                     ) : (
-                        <Text>No reviews available for this post.</Text>
+                        <Text style={styles.noData}>No reviews available for this post.</Text>
                     )}
                 </ScrollView>
             </View>
